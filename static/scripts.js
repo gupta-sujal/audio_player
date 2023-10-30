@@ -80,7 +80,7 @@
 // Select all the elements in the HTML page
 // and assign them to a variable
 let now_playing = document.querySelector(".now-playing");
-const audio=document.getElementById('audio')
+// const audio=document.getElementById('audio')
 let playpause_btn = document.querySelector(".playpause-track");
 let next_btn = document.querySelector(".next-track");
 let prev_btn = document.querySelector(".prev-track");
@@ -97,6 +97,8 @@ let updateTimer;
     fetch('/play_random_song')
         .then(response => response.json())
         .then(data => {
+            clearInterval(updateTimer);
+            updateTimer = setInterval(seekUpdate, 1000);
             const audio = new Audio(data.audio_url);
             const name=data.audio_name;
             const number=data.audio_index;
@@ -124,8 +126,30 @@ function random_bg_color() {
     seek_slider.value = 0;
   }
   random_bg_color()
-  resetValues()
-  // Function to reset all values to their default
+  function seekUpdate() {
+    let seekPosition = 0;
+    
+    // Check if the current track duration is a legible number
+   
+        seekPosition = curr_track.currentTime * (100 / curr_track.duration);
+        seek_slider.value = seekPosition;
+    
+        // Calculate the time left and the total duration
+        let currentMinutes = Math.floor(curr_track.currentTime / 60);
+        let currentSeconds = Math.floor(curr_track.currentTime - currentMinutes * 60);
+        let durationMinutes = Math.floor(curr_track.duration / 60);
+        let durationSeconds = Math.floor(curr_track.duration - durationMinutes * 60);
+    
+        // Add a zero to the single digit time values
+        if (currentSeconds < 10) { currentSeconds = "0" + currentSeconds; }
+        if (durationSeconds < 10) { durationSeconds = "0" + durationSeconds; }
+        if (currentMinutes < 10) { currentMinutes = "0" + currentMinutes; }
+        if (durationMinutes < 10) { durationMinutes = "0" + durationMinutes; }
+    
+        // Display the updated duration
+        curr_time.textContent = currentMinutes + ":" + currentSeconds;
+        total_duration.textContent = durationMinutes + ":" + durationSeconds;
+    }
   function playpauseTrack() {
     // Switch between playing and pausing
     // depending on the current state
@@ -153,13 +177,16 @@ function random_bg_color() {
     
     function nextTrack() {
         pauseTrack()
-        resetValues()
+        resetValues()        
         fetch('/play_random_song')
         .then(response => response.json())
         .then(data => {
+            
             const audio = new Audio(data.audio_url);
             const name=data.audio_name;
             const number=data.audio_index;
+            clearInterval(updateTimer);
+            updateTimer = setInterval(seekUpdate, 1000);
             document.getElementById("display-track-number").textContent =number ; 
             document.getElementById("display-track-name").textContent =name ; 
             curr_track=audio
@@ -175,6 +202,8 @@ function random_bg_color() {
         fetch('/play_random_song')
         .then(response => response.json())
         .then(data => {
+            clearInterval(updateTimer);
+            updateTimer = setInterval(seekUpdate, 1000);
             const audio = new Audio(data.audio_url);
             const name=data.audio_name;
             const number=data.audio_index;
@@ -202,29 +231,5 @@ function random_bg_color() {
         curr_track.volume = volume_slider.value / 100;
         }
         
-        function seekUpdate() {
-        let seekPosition = 0;
         
-        // Check if the current track duration is a legible number
-        if (!isNaN(curr_track.duration)) {
-            seekPosition = curr_track.currentTime * (100 / curr_track.duration);
-            seek_slider.value = seekPosition;
-        
-            // Calculate the time left and the total duration
-            let currentMinutes = Math.floor(curr_track.currentTime / 60);
-            let currentSeconds = Math.floor(curr_track.currentTime - currentMinutes * 60);
-            let durationMinutes = Math.floor(curr_track.duration / 60);
-            let durationSeconds = Math.floor(curr_track.duration - durationMinutes * 60);
-        
-            // Add a zero to the single digit time values
-            if (currentSeconds < 10) { currentSeconds = "0" + currentSeconds; }
-            if (durationSeconds < 10) { durationSeconds = "0" + durationSeconds; }
-            if (currentMinutes < 10) { currentMinutes = "0" + currentMinutes; }
-            if (durationMinutes < 10) { durationMinutes = "0" + durationMinutes; }
-        
-            // Display the updated duration
-            curr_time.textContent = currentMinutes + ":" + currentSeconds;
-            total_duration.textContent = durationMinutes + ":" + durationSeconds;
-        }
-        }
             
