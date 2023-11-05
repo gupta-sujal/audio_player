@@ -26,7 +26,7 @@ body {
     height: 250px;
     width: 250px;
     background-image: URL(
-        "https://source.unsplash.com/Qrspubmx6kE/640x360");
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTURNT1WT3o1xNv-2rQoQb6BNFsIjUIGcHDAQ&usqp=CAU");
     background-size: cover;
     background-position: center;
     border-radius: 15%;
@@ -136,4 +136,30 @@ body {
     i.fa-step-backward {
     cursor: pointer;
     }
+    .navigation ul {
+        font: bold 20px "Helvetica Neue", Helvetica, Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        text-transform: uppercase;
+      }
+      .navigation li {
+        display:flex;
+        flex-direction: column;
+      }
+      .navigation h3 {
+        background: black;
+        /* background: linear-gradient(#49708f, #293f50); */
+        border-right: 1px solid rgba(0, 0, 0, .3);
+        color: #fff;
+        padding: 12px 20px;
+        text-decoration: none;
+        text-align: center;
+      }
+      .navigation li:first-child a {
+        border-radius: 4px 0 0 4px;
+      }
+      .navigation li:last-child a {
+        border-right: 0;
+        border-radius: 0 4px 4px 0;
+      }
     

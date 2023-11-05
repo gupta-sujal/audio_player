@@ -192,7 +192,7 @@ function random_bg_color() {
             curr_track=audio
             playTrack()
             random_bg_color()
-            
+            setVolume()
         });
     }
     
@@ -212,9 +212,79 @@ function random_bg_color() {
             curr_track=audio
             playTrack()
             random_bg_color()
-            
+            setVolume()
         });
     }
+
+
+    function play_select_Track(song,songs_js) {
+        console.log(song)
+        songs_js=JSON.parse(songs_js)
+        console.log(songs_js.length)
+        console.log(songs_js[0])
+        pauseTrack()
+        resetValues() 
+        fetch('/play_select_song', { 
+            method: 'POST', 
+            headers: { 
+              'Content-Type': 'application/json'
+            }, 
+            body: JSON.stringify({data: song}) 
+          }) 
+          .then(response => response.json()) 
+          .then(data => {
+            clearInterval(updateTimer);
+            updateTimer = setInterval(seekUpdate, 1000);
+            const audio = new Audio(data.audio_url);
+            const name=data.audio_name;
+            const number=data.audio_index;
+            document.getElementById("display-track-number").textContent =number ; 
+            document.getElementById("display-track-name").textContent =name ; 
+            curr_track=audio
+            playTrack()
+            random_bg_color()
+            setVolume()
+            
+        });
+        // $.ajax({ 
+        //     url: '/play_select_song', 
+        //     type: 'POST', 
+        //     contentType: 'application/json', 
+        //     data: { 'value': song }, 
+        //     success: function(response) { 
+        //         const audio = new Audio(response.result.json().audio_url); 
+        //         const name=data.audio_name;
+        //         const number=data.audio_index;
+        //         clearInterval(updateTimer);
+        //         updateTimer = setInterval(seekUpdate, 1000);
+        //         document.getElementById("display-track-number").textContent =number ; 
+        //         document.getElementById("display-track-name").textContent =name ; 
+        //         curr_track=audio
+        //         playTrack()
+        //         random_bg_color()
+        //     }, 
+        //     error: function(error) { 
+        //         console.log(error);
+        //         console.log(100) 
+        //     } 
+        // });        
+        // fetch("/play_select_song/${song}")
+        // .then(response => response.json())
+        // .then(data => {            
+        //     const audio = new Audio(data.audio_url);
+        //     const name=data.audio_name;
+        //     const number=data.audio_index;
+        //     clearInterval(updateTimer);
+        //     updateTimer = setInterval(seekUpdate, 1000);
+        //     document.getElementById("display-track-number").textContent =number ; 
+        //     document.getElementById("display-track-name").textContent =name ; 
+        //     curr_track=audio
+        //     playTrack()
+        //     random_bg_color()
+            
+        // });
+    }
+
     function seekTo() {
         // Calculate the seek position by the
         // percentage of the seek slider 

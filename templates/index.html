@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>Simple Music Player</title>
+	
+<title>Sujal's Music Player</title>
 <!-- Load FontAwesome icons -->
 <link rel="stylesheet"
 		href=
@@ -50,8 +51,18 @@
 	<i class="fa fa-volume-up"></i>
 	</div>
 </div>
+<div id="music-list" class="navigation">
+	<ul>
+    {% for song in songs %}
+        <li class="list-item" onclick="play_select_Track('{{song}}','{{songs_js}}')">
+			<h3>{{song[8:-4].replace("_"," ")}}</h3>
+		</li>
+    {% endfor %}
+</ul>
+</div>
 
 <!-- Load the main script for the player -->
 <script src="/static/scripts.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> 
 </body>
 </html>

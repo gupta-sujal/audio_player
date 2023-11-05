@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify,json,request
 import random
 
 app = Flask(__name__)
@@ -18,11 +18,21 @@ audio_files = [
 ]
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html',songs=audio_files,songs_js=json.dumps(audio_files))
 
 @app.route('/play_random_song')
 def play_random_song():
     random_audio_url = random.choice(audio_files)
+    random_audio_index=audio_files.index(random_audio_url)
+    random_audio_name=random_audio_url[8:]
+    return jsonify({'audio_url': random_audio_url,'audio_index':random_audio_index+1,'audio_name':random_audio_name})
+
+@app.route('/play_select_song',methods=['POST'])
+def play_select_song():
+    song = request.json['data']
+    # song=data['value']
+    print(song)
+    random_audio_url = song
     random_audio_index=audio_files.index(random_audio_url)
     random_audio_name=random_audio_url[8:]
     return jsonify({'audio_url': random_audio_url,'audio_index':random_audio_index+1,'audio_name':random_audio_name})
