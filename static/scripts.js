@@ -108,18 +108,20 @@ let updateTimer;
             curr_track=audio
             isPlaying=true
         });
- 
+        var imageUrls = [
+          'image2.jpg',
+          'image3.jpg',
+          // Add more image URLs as needed
+      ];
 function random_bg_color() {
-    let red = Math.floor(Math.random() * 256) + 64;
-    let green = Math.floor(Math.random() * 256) + 64;
-    let blue = Math.floor(Math.random() * 256) + 64;
-   
-    // Construct a color with the given values
-    let bgColor = "rgb(" + red + ", " + green + ", " + blue + ")";
-   
-    // Set the background to the new color
-    document.body.style.background = bgColor;
-  }
+    var element = document.getElementById('top-portion');
+    fetch('/get_image_path')
+        .then(response => response.text())
+        .then(imagePath => {
+            element.style.backgroundImage = `url(${imagePath})`;
+        });
+}
+  
   function resetValues() {
     curr_time.textContent = "00:00";
     total_duration.textContent = "00:00";
@@ -133,7 +135,8 @@ function random_bg_color() {
    
         seekPosition = curr_track.currentTime * (100 / curr_track.duration);
         seek_slider.value = seekPosition;
-    
+        if(seek_slider.value==100)
+        nextTrack()
         // Calculate the time left and the total duration
         let currentMinutes = Math.floor(curr_track.currentTime / 60);
         let currentSeconds = Math.floor(curr_track.currentTime - currentMinutes * 60);
@@ -284,13 +287,13 @@ function random_bg_color() {
             
         // });
     }
-
+    
     function seekTo() {
         // Calculate the seek position by the
         // percentage of the seek slider 
         // and get the relative duration to the track
         seek = curr_track.duration * (seek_slider.value / 100);
-        
+       
         // Set the current track position to the calculated seek position
         curr_track.currentTime = seek;
         }
@@ -299,6 +302,13 @@ function random_bg_color() {
         // Set the volume according to the
         // percentage of the volume slider set
         curr_track.volume = volume_slider.value / 100;
+        }
+        function shuffle()
+        {
+          var ul = document.querySelector('#music-list ul');
+            for (var i = ul.children.length; i >= 0; i--) {
+                ul.appendChild(ul.children[Math.random() * i | 0]);
+            }
         }
         
         
